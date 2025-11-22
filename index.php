@@ -32,6 +32,45 @@
         <link href="css/bootstrap-icons.css" rel="stylesheet">
 
         <link href="css/listing.css" rel="stylesheet">      
+        <style>
+            /* Custom CSS for improved language dropdown */
+            .dropdown button#languageDropdown {
+                min-width: 120px;
+                border-radius: 0.25rem;
+                transition: background-color 0.3s ease;
+            }
+
+            .dropdown button#languageDropdown:hover, 
+            .dropdown button#languageDropdown:focus {
+                background-color: #ffffff;
+                color: #000000;
+                outline: none;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            }
+
+            .dropdown-menu {
+                border-radius: 0.25rem;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+                font-weight: 500;
+                min-width: 140px;
+                padding: 0.2rem 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .dropdown-item {
+                padding: 0.5rem 1.2rem;
+                transition: background-color 0.3s ease;
+                font-size: 0.9rem;
+                color: #212529;
+            }
+
+            .dropdown-item:hover, 
+            .dropdown-item:focus {
+                background-color: #f8f9fa;
+                color: #007bff;
+                outline: none;
+            }
+        </style>
 
     </head>
     
@@ -54,36 +93,47 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-lg-5 me-lg-auto">
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#home">Home</a>
+                                <a class="nav-link click-scroll" href="#home" data-key="Home">Home</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#services">Services</a>
+                                <a class="nav-link click-scroll" href="#services" data-key="Services">Services</a>
                             </li>
     
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#about">About</a>
+                                <a class="nav-link click-scroll" href="#about" data-key="About">About</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#faq">FAQs</a>
+                                <a class="nav-link click-scroll" href="#faq" data-key="FAQs">FAQs</a>
                             </li>
     
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#contact">Contact</a>
+                                <a class="nav-link click-scroll" href="#contact" data-key="Contact">Contact</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="requester/login.php">Login</a>
+                                <a class="nav-link click-scroll" href="requester/login.php" data-key="Login">Login</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="requester/register.php">Register</a>
+                                <a class="nav-link click-scroll" href="requester/register.php" data-key="Register">Register</a>
                             </li>
                         </ul>
 
-                        <div class="d-none d-lg-block">
+                        <div class="d-none d-lg-block me-3">
                             <a href="Requester/login.php" class="navbar-icon bi-person smoothscroll"></a>
+                        </div>
+
+                        <!-- Language dropdown menu -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Language
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                <li><a class="dropdown-item" href="#" id="btn-en">EN - English</a></li>
+                                <li><a class="dropdown-item" href="#" id="btn-sq">AL - Albanian</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -145,9 +195,9 @@
                                         <div>
                                             <h5 class="text-white mb-2">About</h5>
 
-                                            <p class="text-white">CityCare Services is a premier destination for all your blue-collar job needs, redefining the landscape of employment
-                                                services across India. We specialize in connecting job seekers with a diverse range of opportunities, ensuring an unparalleled
-                                                user experience tailored to your specific requirements.</p>
+                                            <p class="text-white">CityCare Services is the premier destination for all your blue-collar job needs in Kosovo. We redefine the landscape of employment
+                                                services across Kosovo. We specialize in connecting job seekers with diverse opportunities, ensuring an unparalleled
+                                                user experience tailored to your specific requirements in Kosovo.</p>
                                         </div>
 
                                       </div>
@@ -425,7 +475,7 @@
                                                             <p class="mb-0">You may have experience in fixing a lot of things at home but plumbing isn’t everyone’s cup of tea. Plumbing issues such as clogged drains, leaky faucets, broken or damaged pipelines etc. can be a homeowner’s nightmare.</p>
                                                         </div>
                                                     </div>
-                                                    <img src="images/5 (1).jpg" class="custom-block-image img-fluid" alt="">
+<img src="https://t4.ftcdn.net/jpg/06/09/29/53/360_F_609295343_xOHOqm0KQnRf65OXla3LFHaKSz2lp6j1.jpg" class="custom-block-image img-fluid" alt="Plumbing Image">
                                             </div>
                                         </div>
                                     </div>
@@ -589,7 +639,7 @@
                         </div>
 
                         <div class="col-lg-5 col-12 mb-4 mb-lg-0">
-                            <iframe class="google-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3463.8846828252103!2d91.77206971232788!3d26.18251403129446!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5998c239e0f1%3A0xcdee0b4d5ff0cc4!2sPub%20Sarania%20Rd%2C%20Chandmari%2C%20Guwahati%2C%20Assam%20781003%2C%20India!5e1!3m2!1sen!2sth!4v1709665704740!5m2!1sen!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<iframe class="google-map" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d23471.61368651997!2d21.163099033142082!3d42.662378689960605!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1763808349560!5m2!1sen!2s" width="420" height="315" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <div class="col-lg-3 col-md-6 col-12 mb-3 mb-lg- mb-md-0 ms-auto">
@@ -713,7 +763,7 @@
                     <p class="mb-0 f_400">© Citycare Services.. 2024 All rights reserved.</p>
                 </div>
                 <div class="col-lg-6 col-sm-5 text-right">
-                    <p><a href="Admin/login.php" target="_blank">Admin Login</a></p>
+                    
                 </div>
             </div>
         </div>
@@ -726,6 +776,95 @@
         <script src="js/jquery.sticky.js"></script>
         <script src="js/click-scroll.js"></script>
         <script src="js/custom.js"></script>
+        
+        <script>
+            const translationsEn = {
+                "Citycare Services":"Citycare Services",
+                "Home":"Home",
+                "Services":"Services",
+                "About":"About",
+                "FAQs":"FAQs",
+                "Contact":"Contact",
+                "Login":"Login",
+                "Register":"Register",
+                "Customer's satisfaction is our Goal.":"Customer's satisfaction is our Goal.",
+                "Any services at your doorstep!":"Any services at your doorstep!",
+                "What kind of service do you want?":"What kind of service do you want?",
+                "Search":"Search",
+                "Get in Touch":"Get in Touch",
+                "Subscribe to our newletter!":"Subscribe to our newletter!",
+                "Email":"Email",
+                "Subscribe":"Subscribe",
+                "Help":"Help",
+                "FAQ":"FAQ",
+                "Follow us!":"Follow us!",
+                "Admin Login":"Admin Login"
+            };
+            const translationsSq = {
+                "Citycare Services":"Shërbimet Citycare",
+                "Home":"Kreu",
+                "Services":"Shërbimet",
+                "About":"Rreth Nesh",
+                "FAQs":"Pyetjet e Shpeshta",
+                "Contact":"Kontakti",
+                "Login":"Hyrje",
+                "Register":"Regjistrohu",
+                "Customer's satisfaction is our Goal.":"Kënaqësia e klientit është qëllimi ynë.",
+                "Any services at your doorstep!":"Çdo shërbim në pragun tuaj!",
+                "What kind of service do you want?":"Çfarë lloji shërbimi dëshironi?",
+                "Search":"Kërko",
+                "Get in Touch":"Na Kontaktoni",
+                "Subscribe to our newletter!":"Abonohuni në buletinin tonë!",
+                "Email":"Email",
+                "Subscribe":"Abonohu",
+                "Help":"Ndihmë",
+                "FAQ":"Pyetjet e Shpeshta",
+                "Follow us!":"Na Ndiqni!",
+                "Admin Login":"Hyrje Admin"
+            };
+            function translateTo(language) {
+                var translateDict = language==="sq"?translationsSq:translationsEn;
+
+                document.querySelector(".navbar-brand span").textContent = translateDict["Citycare Services"];
+                document.querySelectorAll(".navbar-nav a.nav-link").forEach(function(anchor){
+                    var key = anchor.getAttribute("data-key");
+                    if(translateDict[key]){
+                        anchor.textContent = translateDict[key];
+                    }
+                });
+                var heroSlogan = document.querySelector(".hero-section h3");
+                if(heroSlogan) heroSlogan.textContent = translateDict["Customer's satisfaction is our Goal."];
+                var heroSubtitle = document.querySelector(".hero-section h6");
+                if(heroSubtitle) heroSubtitle.textContent = translateDict["Any services at your doorstep!"];
+                var keywordInput = document.getElementById("keyword");
+                if(keywordInput) keywordInput.setAttribute("placeholder", translateDict["What kind of service do you want?"]);
+                var searchBtn = document.querySelector(".hero-section button[type='submit']");
+                if(searchBtn) searchBtn.textContent = translateDict["Search"];
+                var footerContactTitle = document.querySelector(".new_footer_area h3.f-title");
+                if(footerContactTitle) footerContactTitle.textContent = translateDict["Get in Touch"];
+                var footerSubscribeText = document.querySelector(".new_footer_area p");
+                if(footerSubscribeText) footerSubscribeText.textContent = translateDict["Subscribe to our newletter!"];
+                var subscribeEmail = document.querySelector(".new_footer_area input[name='EMAIL']");
+                if(subscribeEmail) subscribeEmail.setAttribute("placeholder", translateDict["Email"]);
+                var subscribeBtn = document.querySelector(".new_footer_area button.btn_get");
+                if(subscribeBtn) subscribeBtn.textContent = translateDict["Subscribe"];
+                var helpTitle = document.querySelector(".new_footer_area h3.f-title:nth-of-type(2)");
+                if(helpTitle) helpTitle.textContent = translateDict["Help"];
+                document.querySelectorAll(".new_footer_area ul.f_list li a").forEach(function(anchor){
+                    var text = anchor.textContent.trim();
+                    if(translateDict[text]){
+                        anchor.textContent = translateDict[text];
+                    }
+                });
+                var followUsTitle = document.querySelector(".new_footer_area h3.f-title:nth-of-type(3)");
+                if(followUsTitle) followUsTitle.textContent = translateDict["Follow us!"];
+                var adminLoginLink = document.querySelector(".footer_bottom a[href='Admin/login.php']");
+                if(adminLoginLink) adminLoginLink.textContent = translateDict["Admin Login"];
+            }
+            document.getElementById("btn-en").addEventListener("click",function(event){event.preventDefault(); translateTo("en")});
+            document.getElementById("btn-sq").addEventListener("click",function(event){event.preventDefault(); translateTo("sq")});
+            translateTo("en");
+        </script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 

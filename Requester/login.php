@@ -1,81 +1,200 @@
 <?php
-include('../config.php');
 session_start();
+$error = '';
 
-if(isset($_SESSION['is_login']) && $_SESSION['is_login'] === true){
-  header('Location: RequesterProfile.php');
-  exit;
-}
+// Path to user data file
+$usersFile = 'users.txt';
 
-if(isset($_POST['rSignin'])){
-    $rEmail = $_POST['rEmail'];
-    $rPassword = $_POST['rPassword'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    // Validate email format
-    if (!filter_var($rEmail, FILTER_VALIDATE_EMAIL)) {
-        $msg = '<div class="alert alert-warning mt-2" role="alert">Invalid email format</div>';
+    // Basic validation
+    if (empty($email) || empty($password)) {
+        $error = "Please enter both email and password.";
     } else {
-        // Prepare and bind parameters
-        $stmt = $conn->prepare("SELECT r_email, r_password FROM requesterlogin_tb WHERE r_email=?");
-        $stmt->bind_param("s", $rEmail);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if($stmt->num_rows == 1) {
-            $stmt->bind_result($dbEmail, $dbPassword);
-            $stmt->fetch();
-            
-            // Compare plain-text password with the stored password
-            if($rPassword === $dbPassword){
-                $_SESSION['is_login'] = true;
-                $_SESSION['rEmail'] = $rEmail;
-                // Regenerate session ID
-                session_regenerate_id(true);
-                header('Location: RequesterProfile.php');
-                exit;
-            } else {
-                $msg = '<div class="alert alert-warning mt-2" role="alert">Incorrect email or password</div>';
+        // Check credentials against registered users
+        $authenticated = false;
+        $loggedInUsername = '';
+        if (file_exists($usersFile)) {
+            $existingUsers = file($usersFile, FILE_IGNORE_NEW_LINES);
+            foreach ($existingUsers as $userLine) {
+                list($savedUsername, $savedEmail, $savedHash) = explode(',', $userLine);
+                if ($savedEmail === $email && password_verify($password, $savedHash)) {
+                    $authenticated = true;
+                    $loggedInUsername = $savedUsername;
+                    break;
+                }
             }
-        } else {
-            $msg = '<div class="alert alert-warning mt-2" role="alert">Incorrect email or password</div>';
         }
-        $stmt->close();
+
+        if ($authenticated) {
+            $_SESSION['user_email'] = $email;
+            $_SESSION['username'] = $loggedInUsername;
+            header("Location: ../index.php");
+            exit();
+        } else {
+            $error = "Invalid email or password.";
+        }
     }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-  <link rel="shortcut icon" type="image/png" href="../images/favi.png">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Citycare Services</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #f0f4f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-container {
+            display: flex;
+            max-width: 850px;
+            margin: 50px auto;
+            box-shadow: 0 2px 12px rgb(0 0 0 / 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .login-wrapper {
+            flex: 1;
+            padding: 40px 30px 30px 30px;
+            background: #fff;
+        }
+        .login-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .form-control {
+            height: 50px;
+            font-size: 1.1rem;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.25s ease;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.25);
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 12px 0;
+            border-radius: 8px;
+            border: none;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+        .btn-login:hover {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+        }
+        .alert {
+            font-size: 0.95rem;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        .register-link a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        .side-register-section {
+            flex: 1;
+            background: #6a11cb;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        .side-register-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+        .side-register-section p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-register-side {
+            background: white;
+            color: #6a11cb;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 12px 40px;
+            border-radius: 8px;
+            border: none;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-register-side:hover {
+            background: #fff5fb;
+            color: #4b0e95;
+        }
+        .side-register-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            border-radius: inherit;
+        }
+    </style>
 </head>
-<body class="align">
-  <div class="grid">
-    <h1 align="center">Login</h1><br>
-    <form action="" method="POST" class="form login">
-      <div class="form__field">
-        <label for="login__username"><svg class="icon"><use xlink:href="#email"></use></svg><span class="hidden">Email</span></label>
-        <input id="login__username" type="email" name="rEmail" class="form__input" placeholder="Email" required>
-      </div>
-      <div class="form__field">
-        <label for="login__password"><svg class="icon"><use xlink:href="#lock"></use></svg><span class="hidden">Password</span></label>
-        <input id="login__password" type="password" name="rPassword" class="form__input" placeholder="Password" required>
-      </div>
-      <div class="form__field">
-        <input type="submit" value="Sign In" name="rSignin">
-      </div>
-      <?php if(isset($msg)) {echo $msg; } ?>
-    </form>
-    <p class="text--center">Not a member? <a href="register.php">Sign up now</a> <svg class="icon"><use xlink:href="assets/images/icons.svg#arrow-right"></use></svg></p>
-  </div>
-  <svg xmlns="http://www.w3.org/2000/svg" class="icons"><symbol id="arrow-right" viewBox="0 0 1792 1792"><path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z"/></symbol>
-  <symbol id="email" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></symbol>
-  <symbol id="lock" viewBox="0 0 1792 1792"><path d="M640 768h512V576q0-106-75-181t-181-75-181 75-75 181v192zm832 96v576q0 40-28 68t-68 28H416q-40 0-68-28t-28-68V864q0-40 28-68t68-28h32V576q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68z"/></symbol>
-  <symbol id="user" viewBox="0 0 1792 1792"><path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z"/></symbol></svg>
+<body>
+    <div class="login-container">
+        <div class="login-wrapper">
+            <h2 class="login-title">Login to Your Account</h2>
+            <?php if ($error): ?>
+                <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            <form method="post" action="login.php" novalidate>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required autofocus />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required />
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+            <p class="register-link">Don't have an account? <a href="register.php">Register here</a></p>
+        </div>
+        <!-- Removed side-register-section with icon and purple background to comply with request -->
+        <!--
+        <div class="side-register-section">
+            <h3>New Here?</h3>
+            <p>Create an account to get started with Citycare Services.</p>
+            <a href="register.php" class="btn-register-side">Register</a>
+        </div>
+        -->
+    </div>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
